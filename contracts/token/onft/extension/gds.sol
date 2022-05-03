@@ -14,6 +14,8 @@ contract  NFT is ONFT,Pausable ,ReentrancyGuard{
     string public baseExtension = ".json"; 
     using Strings for uint256;
     mapping(address => bool) public whitelisted; 
+    mapping(address => bool) private onePerWallet;
+
  
     constructor(string memory _name, string memory _symbol, address _layerZeroEndpoint, uint _startMintId, uint _endMintId) ONFT(_name, _symbol, _layerZeroEndpoint) { 
          nextMintId = _startMintId; 
@@ -22,13 +24,15 @@ contract  NFT is ONFT,Pausable ,ReentrancyGuard{
     } 
  
     /// @notice Mint your ONFT 
-     function mint() external payable { 
+    function mint() external payable { 
         require(nextMintId <= maxMintId, "NFT: Max Mint limit reached"); 
+        require(onePerWallet[msg.sender] == false, "Already minted an NFT");
+        onePerWallet[msg.sender] = true;
         uint newId = nextMintId; 
         nextMintId++; 
         require(whitelisted[msg.sender], "NFT: Wallet address not in whitelist"); 
         _safeMint(msg.sender, newId); 
-    } 
+    }
  
  
      function pauseSendTokens(bool pause) external onlyOwner { 
