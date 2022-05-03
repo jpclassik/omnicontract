@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import ".././ONFT721.sol"; 
 import ".././ONFT.sol"; 
 /// @title Interface of the UniversalONFT standard 
-contract  GentleDoggiesSerum is ONFT,Pausable ,ReentrancyGuard{ 
+contract  NFT is ONFT,Pausable ,ReentrancyGuard{ 
     uint public nextMintId; 
     uint public maxMintId; 
     string public baseTokenURI;
@@ -23,10 +23,10 @@ contract  GentleDoggiesSerum is ONFT,Pausable ,ReentrancyGuard{
  
     /// @notice Mint your ONFT 
      function mint() external payable { 
-        require(nextMintId <= maxMintId, "GentleDoggies: Max Mint limit reached"); 
+        require(nextMintId <= maxMintId, "NFT: Max Mint limit reached"); 
         uint newId = nextMintId; 
         nextMintId++; 
-        require(whitelisted[msg.sender], "Gentle Doggies: Wallet address not in whitelist"); 
+        require(whitelisted[msg.sender], "NFT: Wallet address not in whitelist"); 
         _safeMint(msg.sender, newId); 
     } 
  
